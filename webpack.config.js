@@ -1,23 +1,37 @@
+var webpack = require('webpack');
+var path = require('path');
+//var nodeModulesPath = path.resolve(__dirname, 'node_modules');
+
 module.exports = {
-  entry: './src/index',
-  output: {
-    filename: 'dist/react-schema-form.min.js',
-    library: 'ReactSchemaForm',
-    libraryTarget: 'umd'
+  context: __dirname,
+  devServer: {
+    contentBase: __dirname
   },
-  externals: {
-    'react': {
-      root: 'React',
-      amd: 'react',
-      commonjs: 'react',
-      commonjs2: 'react'
+  entry: {
+    form: './main'
+  },
+  output: {
+    filename: '[name].entry.js'
+  },
+  resolve: {
+    alias: {
+      // Use uncompiled version
+      //'react-schema-form': '../src'
     }
   },
   module: {
-    loaders: [
-        { test: /\.js?$/, loaders: ['react-hot-loader', "babel-loader"], exclude: /node_modules/ },
-      //{test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
-      {test: /\.css?$/, exclude: /node_modules/, loader: 'style!css'},
-    ]
+      loaders: [
+
+          // I highly recommend using the babel-loader as it gives you
+          // ES6/7 syntax and JSX transpiling out of the box
+          {
+              test: /\.(js|jsx)$/,
+              loaders: ['babel-loader?optional=runtime&stage=0'],
+              exclude: /node_modules/
+          },
+          {test: /\.less$/, loader: "style!css!less"},
+          {test: /\.css?$/, loader: 'style!css'},
+          {test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
+      ]
   }
 };
